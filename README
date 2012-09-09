@@ -1,0 +1,108 @@
+
+stm32f0 discovyer examples
+
+This repository is a collection of examples for use on the stm32f0
+discovery board.
+
+http://www.st.com/internet/evalboard/product/253215.jsp
+
+Retails for $7.99 plus shipping.
+
+Under the design support tab you will find a schematic zip file which
+as of this writing simply includes one pdf file.
+
+The next thing you need is the programmers reference manual for the
+STM32F051
+
+At the front/home page for st click on the search tab on the top right
+are, search for stm32f051, and click on any of the parts that start
+with that number.   Then go to the design support tab and go down to the
+reference manual RM0091.  Note the filename doesnt have that number
+in it so it is harder to find later if you dont rename it or mark it or
+save it somewhere related to this project.
+
+This board uses a version 2 (V2) stlink interface, what that really
+is there is another microcontroller on the board, that handles the
+usb side of things, this one you do not develop for.  It allows us to
+access the hardware debugger in the stm32f0 part that we are here to
+program.  This includes loading and running programs in ram and loading
+programs into flash to be run on reset or power up.
+
+No doubt there are closed source windows solutions, but I am interested
+in open source linux solutions.  The main place to go for this is
+
+https://github.com/texane/stlink
+
+I am not a fan of gdb, but am a fan of jtag debugging, dont know who
+added this but there is support for the stmf0 through openocd which is
+the popular open source jtag user interface.  Note we are not directly
+manipulating the jtag on the stm32f0 part, the stlink microcontroller
+does that we simply talk to that microcontroller.
+
+http://openocd.sourceforge.net/
+
+If you svn the latest you will need to run the bootstrap command below
+otherwise start with the configure command.  You may wish to change
+the --prefix line.  I have an openocd install that has a different
+interface installed, and dont want to confuse you by mixing them so
+I am building an placing in directory then adding that path before using
+openocd.  I downloaded the 0.6.0 tarball.
+
+./bootstrap
+./configure --prefix=/stlink --enable-maintainer-mode --enable-stlink
+make
+sudo make install
+
+then before using I
+
+PATH=/stlink/bin:$PATH
+
+In various places in this document you will find an openocd config file
+stm32f0discovery.cfg, this is derived from the stock openocd config.
+The stock one simply points at two other files in openocd, instead I
+pulled the three files and made one complete one that doesnt need to
+go find anything else.  Personal preference no other reason.
+
+As of this writing I dont see that either openocd nor stlink support
+writing the flash on the part.  Basically they give you the ability
+to load and run programs in ram.  Even for parts that say stlink has
+support for, the last time I tried it it was slow, so for these simple
+and small programs I am going to (eventually) use a ram based program
+that loads another program into rom.  Maybe eventually create a serial
+bootloader, will see what happens.
+
+To load a program in sram and run it the simplest way to do it is to
+have one terminal in the directory that contains your binary file
+(elf format), this way you dont have to type in a path, then with
+openocd in your path
+
+openocd -f stm32f0discovery.cfg
+
+it will connect and mention some breakpoints and such.
+
+In another terminal, doesnt matter what directory it is in,
+
+telnet localhost 4444
+
+This should connect to the other and you should see both screens reflect
+the connection.  IF THE CONNECTION WORKS then
+
+> halt
+> load_image blinker01.gcc.thumb.elf
+> resume 0x20000000
+
+If you happen to be running as root in that telnet window and the telnet
+doesnt connect and you type halt without thinking, you turn off your
+computer, a bit annoying...
+
+These parts also include a serial bootloader, as of this writing I am
+not attacking that interface as an alternate way to program this part.
+Perhaps in the future I will add examples to demonstrate that interface,
+some soldering (or desoldering in this case) may be involved), not sure.
+
+Start with the blinker examples, sram directories.
+
+My examples do not initialize .bss nor do I use .data.  To understand
+how that affects you see the bssdata directory in my raspberry pi repo
+http://github.com/dwelch67/raspberrypi  then go to the bssdata repo and
+read the README.

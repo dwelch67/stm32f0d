@@ -1,0 +1,11 @@
+
+See the top level README for schematic and programmers reference information.
+
+Derived from prior blinker examples.  First the gpio for the leds is
+setup.  Then the external 8mhz clock is enabled and selected.  The leds
+are blinked a few times using this clock driving the system.  Then
+the pll is setup to multiply the external clock by 6, 8*6=48MHz the
+fastest rate for this part.  Then the leds are blinked using that
+system clock.  Notice the blink rate change by using a different
+clock.
+

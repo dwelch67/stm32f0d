@@ -154,6 +154,13 @@ int notmain ( void )
     clock_init();
     uart_init();
     hexstrings(0x1234); hexstring(0xABCD);
+    hexstring(GET32(0x1FFFF7AC));
+    hexstring(GET32(0x1FFFF7B0));
+    hexstring(GET32(0x1FFFF7CC));
+    hexstring(GET32(0x40015800));
+
+
+
     while(1)
     {
         ra=uart_recv();

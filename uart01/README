@@ -1,0 +1,19 @@
+
+See the top level README for schematic and programmers reference information.
+
+This example uses PA9 AF1 as USART1_TX.
+
+USART1 and gpioa need to be enabled.  Then looking at the gpio table
+we are interested in AF push pull.  The settings are listed in the
+port bit configuration table in the reference manual.
+
+The baud rate setting for this uart is simple.  From blinker02 we know
+the part comes up using an 8Mhz clock. So 8000000 / 115200 = 69.
+
+If all the usart registers are zeros (with a few exceptions) then we
+get 8 data bits, no parity, one stop bit.  Toggling the reset bit in
+the RCC puts the usart at the reset values which is zeros in all of
+these registers.  Then set the baud rate, and enable the transmitter
+and the uart in general.
+
+

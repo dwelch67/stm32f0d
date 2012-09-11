@@ -9,17 +9,26 @@ http://www.st.com/internet/evalboard/product/253215.jsp
 Retails for $7.99 plus shipping.
 
 Under the design support tab you will find a schematic zip file which
-as of this writing simply includes one pdf file.
+as of this writing simply includes one pdf file.  From the schematics
+the part number for the part we are using is STM32F051R8T6
 
-The next thing you need is the programmers reference manual for the
-STM32F051
+go to the page that comes up for that part.
 
-At the front/home page for st click on the search tab on the top right
-are, search for stm32f051, and click on any of the parts that start
-with that number.   Then go to the design support tab and go down to the
-reference manual RM0091.  Note the filename doesnt have that number
-in it so it is harder to find later if you dont rename it or mark it or
-save it somewhere related to this project.
+http://www.st.com/internet/mcu/product/251901.jsp
+
+Under the design support tab download the datasheet DS8668, note that
+the document number is not part of the filename.  You will also
+want the reference manual RM0091 and the programming manual PM0215.
+
+Go to the bottom of the datasheet, under part numbering.  The R means
+64 pin, the 8 means 64Kbytes.  The T means LQFP.
+
+For the uart examples we need to know the pins for tx and rx.  Searching
+through the document you find that
+PA9 is USART1_TX alternate function 1
+PA10 is USART1_RX alternate function 1
+PB6 is USART1_TX alternate function 0
+PB7 is USART1_RX alternate function 0
 
 This board uses a version 2 (V2) stlink interface, what that really
 is there is another microcontroller on the board, that handles the

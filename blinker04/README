@@ -1,0 +1,4 @@
+
+See the top level README for schematic and programmers reference information.
+
+Same as blinker03 except it switches to the external clock first.

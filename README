@@ -80,6 +80,15 @@ and small programs I am going to (eventually) use a ram based program
 that loads another program into rom.  Maybe eventually create a serial
 bootloader, will see what happens.
 
+Update openocd 0.7.0 is a little different and did not work with this
+config file (works with its own scripts if/when you can get that to work
+(sometimes have to be in the tcl or scripts directory)).  So changing
+to the 0.7.0 file in this repo.  Did not look to see if they support
+flashing yet (to flash they basically have to load a program on the
+arm anyway).
+
+
+
 To load a program in sram and run it the simplest way to do it is to
 have one terminal in the directory that contains your binary file
 (elf format), this way you dont have to type in a path, then with

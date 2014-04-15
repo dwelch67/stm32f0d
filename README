@@ -19,6 +19,7 @@ http://www.st.com/internet/mcu/product/251901.jsp
 Under the design support tab download the datasheet DS8668, note that
 the document number is not part of the filename.  You will also
 want the reference manual RM0091 and the programming manual PM0215.
+For information on the serial bootloader add AN2606 and AN3155.
 
 Go to the bottom of the datasheet, under part numbering.  The R means
 64 pin, the 8 means 64Kbytes.  The T means LQFP.
@@ -42,29 +43,33 @@ in open source linux solutions.  The main place to go for this is
 
 https://github.com/texane/stlink
 
-I am not a fan of gdb, but am a fan of jtag debugging, dont know who
-added this but there is support for the stmf0 through openocd which is
-the popular open source jtag user interface.  Note we are not directly
-manipulating the jtag on the stm32f0 part, the stlink microcontroller
-does that we simply talk to that microcontroller.
+I am not a fan of gdb, but am a fan of jtag debugging there is support
+for the stmf0 through openocd which is the popular open source jtag
+utility for arm.  Note we are not directly manipulating the jtag on the
+stm32f0 part, we are talking to the stlink microcontroller which is
+manipulating the jtag on the stm32f0 for us.
+
+Openocd home
 
 http://openocd.sourceforge.net/
 
-If you svn the latest you will need to run the bootstrap command below
-otherwise start with the configure command.  You may wish to change
-the --prefix line.  I have an openocd install that has a different
-interface installed, and dont want to confuse you by mixing them so
-I am building an placing in directory then adding that path before using
-openocd.  I downloaded the 0.6.0 tarball.
+git clone git://git.code.sf.net/p/openocd/code openocd
+or
+git clone git://repo.or.cz/openocd.git
+or
+git clone http://repo.or.cz/r/openocd.git
 
-./bootstrap
-./configure --prefix=/stlink --enable-maintainer-mode --enable-stlink
+then
+
+cd openocd
+./boostrap
+mkdir build
+cd build
+../configure
+or
+../configure --prefix=SOMEDIR
 make
 sudo make install
-
-then before using I
-
-PATH=/stlink/bin:$PATH
 
 In various places in this document you will find an openocd config file
 stm32f0discovery.cfg, this is derived from the stock openocd config.
@@ -72,27 +77,14 @@ The stock one simply points at two other files in openocd, instead I
 pulled the three files and made one complete one that doesnt need to
 go find anything else.  Personal preference no other reason.
 
-As of this writing I dont see that either openocd nor stlink support
-writing the flash on the part.  Basically they give you the ability
-to load and run programs in ram.  Even for parts that say stlink has
-support for, the last time I tried it it was slow, so for these simple
-and small programs I am going to (eventually) use a ram based program
-that loads another program into rom.  Maybe eventually create a serial
-bootloader, will see what happens.
-
-Update openocd 0.7.0 is a little different and did not work with this
-config file (works with its own scripts if/when you can get that to work
-(sometimes have to be in the tcl or scripts directory)).  So changing
-to the 0.7.0 file in this repo.  Did not look to see if they support
-flashing yet (to flash they basically have to load a program on the
-arm anyway).
-
-
+As of this writing I dont know if there is support for writing the flash
+using openocd.  These examples will only use it to load and run programs
+in ram.
 
 To load a program in sram and run it the simplest way to do it is to
-have one terminal in the directory that contains your binary file
-(elf format), this way you dont have to type in a path, then with
-openocd in your path
+have one terminal for the openocd server.  Change to the directory
+that contains your binary file (elf format), this way you dont have to
+type in a path, then with openocd in your path
 
 openocd -f stm32f0discovery.cfg
 
@@ -109,14 +101,12 @@ the connection.  IF THE CONNECTION WORKS then
 > load_image blinker01.gcc.thumb.elf
 > resume 0x20000000
 
-If you happen to be running as root in that telnet window and the telnet
-doesnt connect and you type halt without thinking, you turn off your
-computer, a bit annoying...
 
-These parts also include a serial bootloader, as of this writing I am
-not attacking that interface as an alternate way to program this part.
-Perhaps in the future I will add examples to demonstrate that interface,
-some soldering (or desoldering in this case) may be involved), not sure.
+These parts also include a serial bootloader, I have used this
+bootloader before with another board.  Verifying that code on this
+board is a work in progress, will update the README when it works.
+
+-----------------
 
 Start with the blinker examples, sram directories.
 

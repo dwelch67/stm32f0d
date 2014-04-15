@@ -1,0 +1,63 @@
+
+See the README in the above directory for more information on
+documentation for this board.
+
+In particular AN2606 and AN3155 were used to develop/verify this
+program.
+
+You will want to connect your host uart to these pins.  NOT RS232
+levels but 3 or 3.3V TTL.
+
+PA9 is USART1_TX alternate function 1
+PA10 is USART1_RX alternate function 1
+
+Then you have to tie BOOT0 to 3V to pull it up.  Power on or press
+the reset button and the part will boot into the internal bootloader.
+
+
+    if(detect_chip()) return(1);
+    if(get()) return(1);
+    if(getverpstat()) return(1);
+    if(getid()) return(1);
+
+outputs
+
+detect_chip()
+chip found
+get()
+79 0B
+31 bootloader version
+00 get
+01 get version and read protection status
+02 get ID
+11 Read Memory
+21 Go
+31 Write Memory
+44 Extended Erase
+63 Write Protect
+73 Write Unprotect
+82 Readout Protect
+92 Readout Unprotect
+getverpstat()
+0x31 version
+0x00 read prot disables
+0x00 read prot enables
+getid()
+79 01 04 40 79
+
+
+From the docs:
+
+"Erase (0x43) and Extended Erase (0x44) are exclusive. A device may
+support either the Erase command or the Extended Erase command but
+not both."
+
+The docs also say that this part should support V2.1 but the read out
+shows version 3.1
+
+
+
+
+
+
+

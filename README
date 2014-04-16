@@ -103,8 +103,32 @@ the connection.  IF THE CONNECTION WORKS then
 
 
 These parts also include a serial bootloader, I have used this
-bootloader before with another board.  Verifying that code on this
-board is a work in progress, will update the README when it works.
+bootloader before with another board.  The uloader directory contains
+a framework of functions that you can use to program the part using the
+built in serial bootloader.  This is probably the easiest way to program
+the flash in this chip.  I can and have made tools that you load using
+stlink that then program the flash that takes more libraries and stuff
+to have success but on a modern linux distro all of these solutions are
+readily available.
+
+However you do things I highly recommend you keep in your toolbox one
+or many usb to serial converters and you learn to use the uart for
+debugging, bootloading, etc.  It remains a simpler to use interface
+than usb.
+
+A recent purchase, experimentally white is RX and green is TX, black GND
+http://www.nexuscyber.com/usb-to-ttl-serial-debug-console-cable-for-raspberry-pi
+
+http://www.sparkfun.com/products/9873
+plus some male/female wire
+http://www.sparkfun.com/products/9140
+
+Solutions that may involve soldering
+http://www.sparkfun.com/products/718
+http://www.sparkfun.com/products/8430
+
+Or this for level shifting to a real com port.
+http://www.sparkfun.com/products/449
 
 -----------------
 

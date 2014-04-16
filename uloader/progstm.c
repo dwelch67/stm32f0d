@@ -551,15 +551,27 @@ int read_unprotect ( void )
     return(0);
 }
 //-----------------------------------------------------------------------------
+int get_stm_info ( void )
+{
+    unsigned int ra,rb,rc;
+
+    //if(detect_chip()) return(1);
+    if(get()) return(1);
+    if(getverpstat()) return(1);
+    if(getid()) return(1);
+
+    return(0);
+}
+//-----------------------------------------------------------------------------
 int do_stm_stuff ( void )
 {
     unsigned int ra,rb,rc;
 
 
-    if(detect_chip()) return(1);
-    if(get()) return(1);
-    if(getverpstat()) return(1);
-    if(getid()) return(1);
+    //if(detect_chip()) return(1);
+    //if(get()) return(1);
+    //if(getverpstat()) return(1);
+    //if(getid()) return(1);
 
 
     //if(erase_flash()) return(1);
@@ -613,7 +625,17 @@ int main ( void )
         return(1);
     }
     printf("port opened\n");
+    if(detect_chip())
+    {
+        ser_close();
+        return(1);
+    }
+
+
+    get_stm_info();
     do_stm_stuff();
+
+
     ser_close();
     return(0);
 }

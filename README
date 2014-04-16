@@ -102,14 +102,33 @@ the connection.  IF THE CONNECTION WORKS then
 > resume 0x20000000
 
 
+Looks like there is flash support now
+
+> flash banks
+#0 : stm32f0x.flash (stm32f1x) at 0x08000000, size 0x00010000, buswidth 0, chipwidth 0
+
+
+flash write_image [erase] [unlock] filename [offset [file_type]]
+
+> flash write_image erase blinker01/flash/blinker01.gcc.thumb.elf
+> reset
+
+and the leds blink
+
+> halt
+> stm32f0x mass_erase 0
+> reset
+
+and they dont.
+
+---------------------
+
 These parts also include a serial bootloader, I have used this
 bootloader before with another board.  The uloader directory contains
 a framework of functions that you can use to program the part using the
-built in serial bootloader.  This is probably the easiest way to program
-the flash in this chip.  I can and have made tools that you load using
-stlink that then program the flash that takes more libraries and stuff
-to have success but on a modern linux distro all of these solutions are
-readily available.
+built in serial bootloader.  See the README in the uloader directory
+
+----------------
 
 However you do things I highly recommend you keep in your toolbox one
 or many usb to serial converters and you learn to use the uart for
